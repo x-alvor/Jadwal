@@ -65,7 +65,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 </head>
 <body>
 <div class="wrap">
-<header><h1>مخطط المذاكرة</h1><a href="index.html">الجدول</a></header>
+<header><h1>مخطط المذاكرة <small style="font-size:11px;opacity:.6">v5</small></h1><a href="index.html">الجدول</a></header>
 
 <section class="card">
 <h2>رجعت البيت</h2>
@@ -138,7 +138,7 @@ function rowHtml(r,k){
  else f=`<input type="text" data-f="text" value="${esc(r.text||"")}" placeholder="${r.type=="new"?"اسم الدرس":"وش حليتوا؟ (نص، أسئلة...)"}">`;
  return `<div class="rw" data-id="${r.id}"><div class="rh"><select data-f="type">${opts}</select><button class="x" data-del="${r.id}" aria-label="حذف">×</button></div>${f}</div>`}
 function renderLog(){
- $("lt").textContent="وش سوينا · "+D[day]+" "+pd;
+ if($("lt"))$("lt").textContent="وش سوينا · "+D[day]+" "+pd;
  $("log").innerHTML=DS[day].map(k=>`<div class="sb s-${k}"><div class="tag">${S[k]}</div>${st.ses.filter(s=>s.date==pd&&s.subj==k).map(r=>rowHtml(r,k)).join("")}<button class="add" data-k="${k}">+ إضافة</button></div>`).join("");
  $("log").querySelectorAll("[data-f]").forEach(el=>el.onchange=()=>{
   const r=st.ses.find(s=>s.id==el.closest(".rw").dataset.id),f=el.dataset.f;r[f]=el.value;
