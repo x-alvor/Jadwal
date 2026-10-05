@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0f3d2e">
+<title>مخطط المذاكرة</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f3f6f4;--card:#fff;--ink:#14231c;--mute:#5f7168;--line:#dfe8e3;--head:#0f3d2e;--now:#ffb400;--field:#f7faf8;
+--phys:#ffd9d2;--phys-i:#a8321f;--math:#d6e4ff;--math-i:#1f4aa8;--eng:#e9dcff;--eng-i:#6232b3;--fre:#ffe3f1;--fre-i:#b0246b;
+--ara:#d9f5e3;--ara-i:#1d7a45;--isl:#fff2c4;--isl-i:#8a6400;--geo:#d3f1f4;--geo-i:#17727c;--sci:#e4f5c8;--sci-i:#4d7a0e;
+--his:#f6e0cc;--his-i:#9a5418;--pe:#ffe0c2;--pe-i:#b4560a}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1511;--card:#13211b;--ink:#e8f4ee;--mute:#8aa196;--line:#223a30;--field:#0e1b16;
+--phys:#4a2019;--phys-i:#ffb3a6;--math:#1a2c52;--math-i:#a9c5ff;--eng:#2f2150;--eng-i:#cdb4ff;--fre:#4a1f35;--fre-i:#ffb0d6;
+--ara:#173a28;--ara-i:#8fe3b0;--isl:#4a3b0d;--isl-i:#ffd966;--geo:#133a40;--geo-i:#8fe0e8;--sci:#2c3f12;--sci-i:#c3e88a;
+--his:#47301b;--his-i:#f5be8c;--pe:#4a2e10;--pe-i:#ffc58a}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Cairo","Segoe UI",Tahoma,Arial,sans-serif;padding:14px 12px 40px}
+.wrap{max-width:760px;margin:auto;display:grid;gap:14px}
+header{background:var(--head);color:#eafff5;border-radius:20px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+h1{margin:0;font-size:24px}h2{margin:0 0 10px;font-size:18px}
+header a{color:#ffd666;font-size:14px;text-decoration:none;font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+label{display:grid;gap:4px;font-size:13px;color:var(--mute);font-weight:700}
+input,select{font-family:inherit;font-size:15px;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:10px;padding:9px 10px;min-width:0}
+input[type=text]{width:100%}
+button{font-family:inherit;font-size:15px;font-weight:700;border:0;border-radius:10px;padding:10px 16px;background:var(--head);color:#eafff5;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--now)}
+.lg{display:grid;gap:8px}
+.lg label{border-radius:12px;padding:10px}
+.tag{font-size:14px;font-weight:800}
+.tk{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;margin-top:8px}
+.tk .x{margin-inline-start:auto;background:transparent;color:inherit;padding:4px 10px;font-size:18px}
+.tk small{opacity:.8;display:block;font-weight:400}
+.done{opacity:.45;text-decoration:line-through}
+.blk{display:flex;gap:12px;align-items:center;padding:12px;border-radius:14px;margin-top:8px;cursor:pointer;border:2px solid transparent}
+.blk .tm{min-width:92px;font-weight:800;font-size:14px;direction:ltr;text-align:center}
+.blk b{display:block}.blk small{font-weight:400;opacity:.85}
+.brk{text-align:center;color:var(--mute);font-size:12px;padding:2px}
+.sum{background:var(--head);color:#eafff5;border-radius:12px;padding:10px 14px;font-size:14px;margin-bottom:6px}
+.warn{background:var(--now);color:#2a1d00;border-radius:12px;padding:10px 14px;font-size:14px;margin-top:8px;font-weight:700}
+.empty{color:var(--mute);font-size:14px;padding:8px 0}
+.s-phys{background:var(--phys);color:var(--phys-i)}.s-math{background:var(--math);color:var(--math-i)}
+.s-eng{background:var(--eng);color:var(--eng-i)}.s-fre{background:var(--fre);color:var(--fre-i)}
+.s-ara{background:var(--ara);color:var(--ara-i)}.s-isl{background:var(--isl);color:var(--isl-i)}
+.s-geo{background:var(--geo);color:var(--geo-i)}.s-sci{background:var(--sci);color:var(--sci-i)}
+.s-his{background:var(--his);color:var(--his-i)}.s-pe{background:var(--pe);color:var(--pe-i)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>مخطط المذاكرة</h1><a href="index.html">الجدول</a></header>
+
+<section class="card">
+<h2>رجعت البيت</h2>
+<div class="row">
+<label>اليوم<select id="day"></select></label>
+<label>رجعت الساعة<input type="time" id="home"></label>
+<label>راحة (دقيقة)<input type="number" id="rest" min="0" max="180" step="5" style="width:90px"></label>
+<label>أنهي الساعة<input type="time" id="endt"></label>
+</div>
+</section>
+
+<section class="card">
+<h2>وش سوينا اليوم</h2>
+<div class="lg" id="log"></div>
+</section>
+
+<section class="card">
+<h2>الواجبات</h2>
+<div class="row">
+<label>المادة<select id="ts"></select></label>
+<label style="flex:1;min-width:140px">الواجب<input type="text" id="tt" placeholder="مثال: تمرين 5 و 6 ص 40"></label>
+<label>التسليم<input type="date" id="td"></label>
+<label>المدة<select id="tm"><option>15</option><option selected>30</option><option>45</option><option>60</option><option>90</option></select></label>
+<button id="ta">إضافة</button>
+</div>
+<div id="tl"></div>
+</section>
+
+<section class="card">
+<h2>خطتك الليلة</h2>
+<div id="plan"></div>
+</section>
+</div>
+<script>
+const S={phys:"الفيزياء",math:"الرياضيات",eng:"الإنجليزية",fre:"الفرنسية",ara:"العربية",isl:"الإسلامية",geo:"الجغرافيا",sci:"العلوم",his:"التاريخ",pe:"التربية البدنية"};
+const KEY=new Set(["phys","math"]);
+const D=["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس"];
+const DS=[["phys","math","eng","isl"],["math","eng","fre","sci","ara","his"],["geo","math","phys"],["fre","ara","pe","sci","phys","his","geo"],["eng","fre","ara","isl","math"]];
+const DEND=["15:30","16:30","12:00","16:30","15:30"];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const toM=t=>{const[a,b]=t.split(":");return +a*60+(+b||0)};
+const fm=m=>String(Math.floor(m/60)%24).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
+let st={tasks:[],log:[],home:{},rest:60,end:"23:00",done:{}};
+try{const r=localStorage.getItem("jadwal-planner");if(r)st=Object.assign(st,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem("jadwal-planner",JSON.stringify(st))}catch(e){}};
+const now=new Date(),today=iso(now),todayMid=new Date(today+"T00:00");
+let day=now.getDay()<=4?now.getDay():0;
+const sel=$("day");sel.innerHTML=D.map((d,i)=>`<option value="${i}">${d}</option>`).join("");sel.value=day;
+$("ts").innerHTML=Object.keys(S).map(k=>`<option value="${k}">${S[k]}</option>`).join("");
+$("td").value=today;
+function setInputs(){$("home").value=st.home[day]||DEND[day];$("rest").value=st.rest;$("endt").value=st.end}
+sel.onchange=()=>{day=+sel.value;setInputs();renderAll()};
+$("home").onchange=()=>{st.home[day]=$("home").value;save();renderPlan()};
+$("rest").onchange=()=>{st.rest=Math.max(0,+$("rest").value||0);save();renderPlan()};
+$("endt").onchange=()=>{st.end=$("endt").value||"23:00";save();renderPlan()};
+
+function renderLog(){
+ $("log").innerHTML=DS[day].map(k=>{const e=st.log.find(l=>l.date==today&&l.subj==k);
+  return `<label class="s-${k}"><span class="tag">${S[k]}</span><input type="text" data-k="${k}" value="${e?esc(e.text):""}" placeholder="وش سويتوا في ${S[k]}؟"></label>`}).join("");
+ $("log").querySelectorAll("input").forEach(i=>i.onchange=()=>{const k=i.dataset.k;
+  st.log=st.log.filter(l=>!(l.date==today&&l.subj==k));
+  if(i.value.trim())st.log.push({id:"l"+Date.now()+k,date:today,subj:k,text:i.value.trim()});save();renderPlan()})}
+function dueInfo(t){if(!t.due)return{d:99,s:""};const d=Math.round((new Date(t.due+"T00:00")-todayMid)/864e5);
+ return{d,s:d<0?"متأخر "+(-d)+" يوم":d==0?"اليوم":d==1?"بكرة":"بعد "+d+" أيام"}}
+function renderTasks(){
+ const L=st.tasks.slice().sort((a,b)=>a.done-b.done||dueInfo(a).d-dueInfo(b).d);
+ $("tl").innerHTML=L.length?L.map(t=>`<div class="tk s-${t.subj} ${t.done?"done":""}"><input type="checkbox" data-id="${t.id}" ${t.done?"checked":""}><div><b>${S[t.subj]}: ${esc(t.text)}</b><small>${dueInfo(t).s} · ${t.min} د</small></div><button class="x" data-del="${t.id}" aria-label="حذف">×</button></div>`).join(""):`<div class="empty">ما فيه واجبات. أضف أول واحد من فوق.</div>`;
+ $("tl").querySelectorAll("input").forEach(i=>i.onchange=()=>{st.tasks.find(t=>t.id==i.dataset.id).done=i.checked;save();renderAll()});
+ $("tl").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{st.tasks=st.tasks.filter(t=>t.id!=b.dataset.del);save();renderAll()})}
+$("ta").onclick=()=>{const tx=$("tt").value.trim();if(!tx)return $("tt").focus();
+ st.tasks.push({id:"t"+Date.now(),subj:$("ts").value,text:tx,due:$("td").value,min:+$("tm").value,done:false});$("tt").value="";save();renderAll()};
+
+function build(){
+ const it=[];
+ st.tasks.filter(t=>!t.done).forEach(t=>{const d=dueInfo(t).d;
+  it.push({id:"hw"+t.id,tid:t.id,k:t.subj,ty:"واجب",tx:t.text,min:t.min,sc:50+(d<=0?100:d==1?80:d==2?60:d<=4?40:20)+(KEY.has(t.subj)?25:0)})});
+ DS[day].forEach(k=>{const e=st.log.find(l=>l.date==today&&l.subj==k);
+  if(e)it.push({id:"rv"+k,k,ty:"راجع درس اليوم",tx:e.text,min:KEY.has(k)?25:15,sc:45+(KEY.has(k)?25:0)});
+  else if(KEY.has(k))it.push({id:"rv"+k,k,ty:"راجع حصة اليوم",tx:"",min:20,sc:60})});
+ ["math","phys"].forEach(k=>{const e=st.log.find(l=>l.date==today&&l.subj==k);
+  it.push({id:"ex"+k,k,ty:"حل تمارين",tx:e?"على: "+e.text:"من الدروس اللي مرّت",min:35,sc:70})});
+ let sp=0;st.log.filter(l=>l.date<today).sort((a,b)=>(KEY.has(b.subj)-KEY.has(a.subj))||(a.date<b.date?1:-1)).forEach(l=>{
+  const age=Math.round((todayMid-new Date(l.date+"T00:00"))/864e5);
+  if(sp<4&&[1,3,7,14,30].includes(age)){sp++;it.push({id:"sp"+l.id,k:l.subj,ty:"مراجعة دورية",tx:l.text+" (قبل "+age+" يوم)",min:20,sc:55+(KEY.has(l.subj)?20:0)})}});
+ it.sort((a,b)=>b.sc-a.sc);
+ let t=toM($("home").value||DEND[day])+st.rest;const start=t,soft=toM(st.end),hard=soft+30;
+ const out=[],over=[];let n=0,tot=0;
+ for(const x of it){const need=x.min;
+  const lim=KEY.has(x.k)?hard:soft;
+  if(t+need>lim){if(t+need>hard||!KEY.has(x.k)){over.push(x);continue}}
+  out.push({...x,a:t,b:t+need});t+=need;tot+=need;n++;
+  const br=n%3==0?20:10;if(it.indexOf(x)<it.length-1){out.push({br:br,a:t,b:t+br});t+=br}}
+ while(out.length&&out[out.length-1].br)t-=out.pop().br;
+ return{out,over,start,end:t,tot,soft}}
+function renderPlan(){
+ const p=build();
+ if(!p.out.length){$("plan").innerHTML=`<div class="empty">ما فيه وقت كافي قبل ${st.end}. غيّر وقت الرجوع أو الراحة.</div>`;return}
+ let h=`<div class="sum">من ${fm(p.start)} إلى ${fm(p.end)} · مذاكرة ${(p.tot/60).toFixed(1)} ساعة</div>`;
+ p.out.forEach(b=>{if(b.br){h+=`<div class="brk">راحة ${b.br} د</div>`;return}
+  const dn=st.done[today+b.id];
+  h+=`<div class="blk s-${b.k} ${dn?"done":""}" data-id="${b.id}" data-tid="${b.tid||""}" role="button" tabindex="0"><div class="tm">${fm(b.a)}–${fm(b.b)}</div><div><b>${b.ty} · ${S[b.k]}</b><small>${esc(b.tx)}</small></div></div>`});
+ if(p.end>p.soft)h+=`<div class="warn">الخطة تمتد إلى ${fm(p.end)} بسبب الرياضيات أو الفيزياء. تقدر تبدأ بدري أو تقلل الراحة.</div>`;
+ if(p.over.length)h+=`<div class="warn">ما اتسع الوقت لـ: ${p.over.map(o=>S[o.k]+" ("+o.ty+")").join("، ")}. أجّلها لبكرة.</div>`;
+ $("plan").innerHTML=h;
+ $("plan").querySelectorAll(".blk").forEach(el=>{const f=()=>{const k=today+el.dataset.id;st.done[k]=!st.done[k];
+  if(el.dataset.tid){const t=st.tasks.find(x=>x.id==el.dataset.tid);if(t)t.done=!!st.done[k]}save();renderAll()};
+  el.onclick=f;el.onkeydown=e=>{if(e.key=="Enter")f()}})}
+function renderAll(){renderLog();renderTasks();renderPlan()}
+setInputs();renderAll();
+</script>
+</body>
+</html>
