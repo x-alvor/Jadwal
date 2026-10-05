@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0f3d2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>الجدول الأسبوعي</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f3f6f4;--card:#fff;--ink:#14231c;--mute:#5f7168;--line:#dfe8e3;--head:#0f3d2e;--headink:#eafff5;--now:#ffb400;
+--phys:#ffd9d2;--phys-i:#a8321f;--math:#d6e4ff;--math-i:#1f4aa8;--eng:#e9dcff;--eng-i:#6232b3;--fre:#ffe3f1;--fre-i:#b0246b;
+--ara:#d9f5e3;--ara-i:#1d7a45;--isl:#fff2c4;--isl-i:#8a6400;--geo:#d3f1f4;--geo-i:#17727c;--sci:#e4f5c8;--sci-i:#4d7a0e;
+--his:#f6e0cc;--his-i:#9a5418;--pe:#ffe0c2;--pe-i:#b4560a}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1511;--card:#13211b;--ink:#e8f4ee;--mute:#8aa196;--line:#223a30;--head:#0a2a1f;
+--phys:#4a2019;--phys-i:#ffb3a6;--math:#1a2c52;--math-i:#a9c5ff;--eng:#2f2150;--eng-i:#cdb4ff;--fre:#4a1f35;--fre-i:#ffb0d6;
+--ara:#173a28;--ara-i:#8fe3b0;--isl:#4a3b0d;--isl-i:#ffd966;--geo:#133a40;--geo-i:#8fe0e8;--sci:#2c3f12;--sci-i:#c3e88a;
+--his:#47301b;--his-i:#f5be8c;--pe:#4a2e10;--pe-i:#ffc58a}}
+:root[data-theme="dark"]{--bg:#0b1511;--card:#13211b;--ink:#e8f4ee;--mute:#8aa196;--line:#223a30;--head:#0a2a1f;
+--phys:#4a2019;--phys-i:#ffb3a6;--math:#1a2c52;--math-i:#a9c5ff;--eng:#2f2150;--eng-i:#cdb4ff;--fre:#4a1f35;--fre-i:#ffb0d6;
+--ara:#173a28;--ara-i:#8fe3b0;--isl:#4a3b0d;--isl-i:#ffd966;--geo:#133a40;--geo-i:#8fe0e8;--sci:#2c3f12;--sci-i:#c3e88a;
+--his:#47301b;--his-i:#f5be8c;--pe:#4a2e10;--pe-i:#ffc58a}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Cairo","Segoe UI",Tahoma,Arial,sans-serif;padding:16px 12px 28px}
+.wrap{max-width:980px;margin:auto}
+header{background:var(--head);color:var(--headink);border-radius:20px;padding:20px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{margin:0;font-size:26px;font-weight:800}
+.sub{margin:4px 0 0;opacity:.8;font-size:14px}
+#now{background:rgba(255,255,255,.12);border-radius:14px;padding:10px 14px;font-size:14px;min-width:170px}
+#now b{display:block;font-size:16px;color:#ffd666}
+.scroll{overflow-x:auto;margin-top:14px;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:0 8px 28px rgba(10,40,28,.10)}
+table{border-collapse:separate;border-spacing:5px;width:100%;min-width:680px}
+th{font-weight:700;font-size:15px;padding:12px 6px;border-radius:12px;background:var(--head);color:var(--headink)}
+th.today{background:var(--now);color:#2a1d00}
+th small{display:block;font-weight:400;font-size:11px;opacity:.75}
+td.t{width:92px;text-align:center;font-size:13px;font-weight:700;color:var(--mute);background:transparent;line-height:1.3;white-space:nowrap}
+td.t span{display:block;font-weight:400;font-size:11px}
+td.c{text-align:center;font-weight:700;font-size:15px;border-radius:12px;padding:12px 4px;height:54px}
+td.off{background:transparent;color:var(--line);font-weight:400}
+td.lunch{background:repeating-linear-gradient(45deg,transparent 0 8px,var(--line) 8px 9px);height:18px;padding:0;border-radius:8px;font-size:11px;color:var(--mute);font-weight:400}
+.cur{outline:3px solid var(--now);outline-offset:1px;animation:p 1.6s ease-in-out infinite}
+@keyframes p{50%{outline-color:transparent}}
+@media (prefers-reduced-motion:reduce){.cur{animation:none}}
+.s-phys{background:var(--phys);color:var(--phys-i)}.s-math{background:var(--math);color:var(--math-i)}
+.s-eng{background:var(--eng);color:var(--eng-i)}.s-fre{background:var(--fre);color:var(--fre-i)}
+.s-ara{background:var(--ara);color:var(--ara-i)}.s-isl{background:var(--isl);color:var(--isl-i)}
+.s-geo{background:var(--geo);color:var(--geo-i)}.s-sci{background:var(--sci);color:var(--sci-i)}
+.s-his{background:var(--his);color:var(--his-i)}.s-pe{background:var(--pe);color:var(--pe-i)}
+.s-hg{background:linear-gradient(90deg,var(--his),var(--geo));color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
+.chip{border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;border:0;cursor:pointer;font-family:inherit}
+.chip small{opacity:.7;font-weight:400;margin-inline-start:4px}
+.chip.on{outline:2px solid var(--ink)}
+.dim{opacity:.18}
+.tools{display:flex;gap:8px;margin-top:12px}
+.tools button{font-family:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:8px 14px;font-size:14px;cursor:pointer}
+button:focus-visible{outline:3px solid var(--now)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div><h1>الجدول الأسبوعي</h1><p class="sub">من الأحد إلى الخميس</p></div>
+<div id="now">…</div>
+</header>
+<div class="scroll"><table id="tb"></table></div>
+<div class="legend" id="lg"></div>
+<div class="tools"><button id="th">تبديل الوضع الداكن</button><button id="rs">إظهار الكل</button></div>
+</div>
+<script>
+const S={phys:"فيزياء",math:"رياضيات",eng:"انجليزية",fre:"فرنسية",ara:"عربية",isl:"إسلامية",geo:"جغرافيا",sci:"علوم",his:"تاريخ",pe:"ت. بدنية",hg:"تاريخ/جغرافيا"};
+const D=["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس"];
+const T=[["8","9"],["9","10"],["10","11"],["11","12"],["13:30","14:30"],["14:30","15:30"],["15:30","16:30"]];
+// [subject, rowspan] per day per slot; null = skip (merged); 0 = free
+const G=[
+[["phys",2],null,["math",2],null,["eng",1],["isl",1],0],
+[["math",2],null,["eng",1],["fre",1],["sci",1],["ara",1],["his",1]],
+[["geo",1],["math",1],["phys",2],null,0,0,0],
+[["fre",1],["ara",1],["pe",2],null,["sci",1],["phys",1],["hg",1]],
+[["eng",1],["fre",1],["ara",1],["isl",1],["math",2],null,0]];
+const mins=s=>{const[a,b]=s.split(":");return +a*60+(+b||0)};
+const tb=document.getElementById("tb");
+let h="<tr><th></th>"+D.map((d,i)=>`<th data-d="${i}">${d}</th>`).join("")+"</tr>";
+T.forEach((t,r)=>{
+ if(r==4)h+=`<tr><td class="t"></td><td class="lunch" colspan="5">استراحة الغداء</td></tr>`;
+ h+=`<tr><td class="t">${t[0]}<span>إلى ${t[1]}</span></td>`;
+ D.forEach((_,d)=>{const c=G[d][r];if(c===null)return;
+  if(c===0)h+=`<td class="c off" data-d="${d}" data-r="${r}">—</td>`;
+  else h+=`<td class="c s-${c[0]}" data-k="${c[0]}" data-d="${d}" data-r="${r}" rowspan="${c[1]}">${S[c[0]]}</td>`});
+ h+="</tr>"});
+tb.innerHTML=h;
+// legend with weekly hours
+const hrs={};G.forEach(col=>col.forEach((c,r)=>{if(c&&c!==0){hrs[c[0]]=(hrs[c[0]]||0)+c[1]}}));
+const lg=document.getElementById("lg");
+Object.keys(hrs).filter(k=>k!="hg").sort((a,b)=>hrs[b]-hrs[a]).forEach(k=>{
+ const b=document.createElement("button");b.className="chip s-"+k;b.innerHTML=`${S[k]}<small>${hrs[k]} س</small>`;
+ b.onclick=()=>{const on=b.classList.toggle("on");
+  lg.querySelectorAll(".chip").forEach(x=>x!==b&&x.classList.remove("on"));
+  tb.querySelectorAll("td.c[data-k]").forEach(td=>td.classList.toggle("dim",on&&td.dataset.k!==k&&!(k=="his"||k=="geo")||on&&(k=="his"||k=="geo")&&td.dataset.k!==k&&td.dataset.k!="hg"))};
+ lg.appendChild(b)});
+document.getElementById("rs").onclick=()=>{tb.querySelectorAll(".dim").forEach(x=>x.classList.remove("dim"));lg.querySelectorAll(".on").forEach(x=>x.classList.remove("on"))};
+// today / current lesson
+function tick(){
+ const n=new Date(),di=n.getDay()-0,idx=di>=0&&di<=4?di-0:-1; // Sun=0..Thu=4
+ const m=n.getHours()*60+n.getMinutes();
+ tb.querySelectorAll(".cur").forEach(x=>x.classList.remove("cur"));
+ tb.querySelectorAll("th.today").forEach(x=>x.classList.remove("today"));
+ let msg="<b>لا حصة الآن</b>اليوم عطلة";
+ if(idx>=0){tb.querySelector(`th[data-d="${idx}"]`).classList.add("today");msg="<b>لا حصة الآن</b>"+D[idx];
+  T.forEach((t,r)=>{if(m>=mins(t[0])&&m<mins(t[1])){let rr=r;while(G[idx][rr]===null)rr--;
+   const c=G[idx][rr];if(c){const el=tb.querySelector(`td[data-d="${idx}"][data-r="${rr}"]`);if(el){el.classList.add("cur")}
+    if(c!==0)msg=`<b>الآن: ${S[c[0]]}</b>${t[0]} إلى ${t[1]}`}}})}
+ document.getElementById("now").innerHTML=msg}
+tick();setInterval(tick,60000);
+// theme toggle
+document.getElementById("th").onclick=()=>{const r=document.documentElement,
+ d=r.dataset.theme?r.dataset.theme=="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=d?"light":"dark"};
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
